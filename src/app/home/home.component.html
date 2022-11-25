@@ -1,0 +1,128 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-between p-4">
+    <h5>Patient List</h5>
+   
+    
+      <input type="search" class="form-control rounded w-25" placeholder="Search" [(ngModel)]="term" aria-label="Search" aria-describedby="search-addon" />
+    
+        
+      <button type="button" class="btn btn-success btn-sm btn-rounded" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+        New Patient
+      </button>
+</div>
+<table class="table align-middle mb-0 bg-white px-5">
+    <thead class="bg-light">
+      <tr>
+        <th (click)="reverseById()">#<span [hidden]="reverseId">▼</span
+          ><span [hidden]="!reverseId">▲</span></th>
+        <th
+        [class.active]="Name === 'patients.name'"
+        (click)="setOrder('patients.name')"
+        class="mdl-data-table__cell--non-numeric"
+      >
+        Name <span [hidden]="reverse">▼</span
+        ><span [hidden]="!reverse">▲</span>
+      </th>
+      <th 
+      [class.active]="email === 'patients.email'"
+      (click)="setOrder('patients.email')"
+     
+    >
+      Email <span [hidden]="reverse">▼</span
+      ><span [hidden]="!reverse">▲</span>
+    </th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let one of patients | filter:term | orderBy:[ Name,email] | paginate: { itemsPerPage: 3, currentPage: p } ;index as i">
+        <td>{{i+1}}</td>
+        <td><p class="fw-bold mb-1" [routerLink]="['/detail', i]">{{one.name}}</p></td>
+        <td><p class="fw-normal mb-1">{{one.email}}</p></td>
+        <td><p class="fw-normal mb-1">{{one.age}}</p></td>
+        <td><p class="fw-normal mb-1">{{one.gender}}</p></td>
+        <td>
+          <button type="button" class="btn btn-link btn-sm btn-rounded" (click)="deletePatient(i)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+  
+  <!-- <table id="tableSortExample" mdbTable class="z-depth-1">
+    <thead>
+      <tr>
+        <th *ngFor="let head of headElements; let i = index" aria-controls="tableSortExample" scope="col" [mdbTableSort]="elements" [sortBy]="headElements[i]">{{ head | titlecase }}
+          <mdb-icon fas icon="sort"></mdb-icon>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let el of elements; let i = index">
+        <th scope="row">{{ el.id }}</th>
+        <td>{{ el.first }}</td>
+        <td>{{ el.last }}</td>
+        <td>{{ el.handle }}</td>
+      </tr>
+    </tbody>
+  </table> -->
+  <div class="d-flex justify-content-between pt-5">
+    <div></div>
+     <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Patient</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="patientForm">
+                <div class="form-outline mb-4">
+                    <input type="text" id="form3Example2cg" formControlName="name" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example2cg">Name</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input type="email" id="form3Example3cg" formControlName="email" class="form-control form-control-lg"/>
+                    <label class="form-label" for="form3Example3cg">Your Email</label>
+                  </div>
+                <div class="form-outline mb-4">
+                  <input type="text" id="form3Example1cg" formControlName="age" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example1cg">Age</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio1" value="male" />
+                    <label class="form-check-label" for="inlineRadio1">male</label>
+                  </div>
+                  
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio2" value="female" />
+                    <label class="form-check-label" for="inlineRadio2">female</label>
+                  </div>
+                  
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" formControlName="gender" id="inlineRadio3" value="other" />
+                    <label class="form-check-label" for="inlineRadio3">other</label>
+                  </div>
+                  <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button> -->
+                    <button type="button" class="btn btn-primary" (click)="OnSubmit()" data-mdb-dismiss="modal">Save changes</button>
+                  </div>
+
+              </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
